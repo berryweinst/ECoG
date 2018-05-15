@@ -42,31 +42,35 @@ class Data(object):
         return minibatches
 
     @staticmethod
-    def create_train_test_data_for_reg(image_model, mode='full', hfile='features.h5'):
+    def create_train_test_data_for_reg(dataset, layer):
         ecog_data = pickle.load(open("data_dict_src.p", "rb"))
-        f = h5.File(hfile, "r")
-        dataset, layer = extract_last_dict_samples(f[image_model])
+        dataset = np.array(dataset)
+        dim = dataset.shape
+        dataset = dataset.reshape(dim[0], dim[1] * dim[2] * dim[3])
+        # dataset = [zscore(t) for t in dataset.reshape(dim[0], dim[1] * dim[2] * dim[3]).T]
+        # dataset = np.array(dataset).T
+        minibatches = [(dataset[i], ecog_data[i]) for i in range(dim[0])]
         # features = {}
-        minibatches = []
-        for idx, e in enumerate(ecog_data):
-            # features = {}
-            # for layer in list(f[image_model]):
-            # features[layer] = np.array(dataset[idx])
-            # if mode == 'full':
-            #     features[layer] = features[layer].reshape(
-            #         (features[layer].shape[0] * features[layer].shape[1] * features[layer].shape[2]))
-            # if mode == 'voxel':
-            #     features[layer] = features[layer].reshape(
-            #         (features[layer].shape[0] * features[layer].shape[1], features[layer].shape[2]))
-            # elif mode == 'avg':
-            #     features[layer] = features[layer].reshape(
-            #         (features[layer].shape[0] * features[layer].shape[1], features[layer].shape[2]))
-            #     features[layer] = np.mean(features[layer], axis=0)
-            # features[layer] = zscore(np.array(features[layer]))
-            # ecog = e[electrode, :]
-            dim = np.array(dataset[idx]).shape
-            minibatches.append((zscore(np.array(dataset[idx]).reshape(
-                    (dim[0] * dim[1] * dim[2]))), e))
+        # minibatches = []
+        # for idx, e in enumerate(ecog_data):
+        #     # features = {}
+        #     # for layer in list(f[image_model]):
+        #     # features[layer] = np.array(dataset[idx])
+        #     # if mode == 'full':
+        #     #     features[layer] = features[layer].reshape(
+        #     #         (features[layer].shape[0] * features[layer].shape[1] * features[layer].shape[2]))
+        #     # if mode == 'voxel':
+        #     #     features[layer] = features[layer].reshape(
+        #     #         (features[layer].shape[0] * features[layer].shape[1], features[layer].shape[2]))
+        #     # elif mode == 'avg':
+        #     #     features[layer] = features[layer].reshape(
+        #     #         (features[layer].shape[0] * features[layer].shape[1], features[layer].shape[2]))
+        #     #     features[layer] = np.mean(features[layer], axis=0)
+        #     # features[layer] = zscore(np.array(features[layer]))
+        #     # ecog = e[electrode, :]
+        #     dim = np.array(dataset[idx]).shape
+        #     minibatches.append((zscore(np.array(dataset[idx]).reshape(
+        #             (dim[0] * dim[1] * dim[2]))), e))
         return minibatches, layer
 
 

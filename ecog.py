@@ -110,8 +110,8 @@ class video_data_exp(object):
                 elec_tl_avg = np.add(elec_tl_avg, all_ecog_data[:, ecog_time : ecog_time + sample_size])
                 idx2 += 1
                 if (self.image_extract):
-                    image_out = np.zeros([256, 256, 3])
-                    image_out.fill(np.mean(image))
+                    # image_out = np.zeros([256, 256, 3])
+                    # image_out.fill(np.mean(image))
                     y_start = int(max(0, y_pixel - 256 / 2 + 1))
                     y_end = int(min(y_pixel + 256 / 2, image.shape[0]))
                     x_start = int(max(0, x_pixel - 256 / 2 + 1))
@@ -126,37 +126,14 @@ class video_data_exp(object):
         data_dict = {}
         data_dict['src'] = postData
         self.samples_cnt = postData.shape[1]
-        # data_dict['target'] = {}
-        # data_dict['target']['conv1'] = np.array(f[self.cnn_model]['conv1'], dtype=float)
-        # data_dict['target']['block1'] = np.array(f[self.cnn_model]['block1'], dtype=float))
-        # data_dict['target']['block2'] = np.array(f[self.cnn_model]['block2'], dtype=float))
-        # data_dict['target']['block3'] = np.array(f[self.cnn_model]['block3'], dtype=float))
-        # data_dict['target']['block4'] = np.array(f[self.cnn_model]['block4'], dtype=float))
         print("Shape of the source: ", data_dict['src'].shape)
-        # print("Shape of the target conv1: ", data_dict['src'].shape)
-        # print("Shape of the target block1: ", data_dict['target']['block1'].shape)
-        # print("Shape of the target block2: ", data_dict['target']['block2'].shape)
-        # print("Shape of the target block3: ", data_dict['target']['block3'].shape)
-        # print("Shape of the target block4: ", data_dict['target']['block4'].shape)
         print("Saving the Pickle dictionary")
         pickle.dump(data_dict['src'], open("data_dict_src.p", "wb"))
         print ("data_dict_src.p... saved")
-        # pickle.dump(data_dict['target']['conv1'], open("data_dict_target_conv1.p", "wb"))
-        # print ("data_dict_target_conv1.p... saved")
-        # pickle.dump(data_dict['target']['block1'], open("data_dict_target_block1.p", "wb"))
-        # print ("data_dict_target_block1.p... saved")
-        # pickle.dump(data_dict['target']['block2'], open("data_dict_target_block2.p", "wb"))
-        # print ("data_dict_target_block2.p... saved")
-        # pickle.dump(data_dict['target']['block3'], open("data_dict_target_block3.p", "wb"))
-        # print ("data_dict_target_block3.p... saved")
-        # pickle.dump(data_dict['target']['block4'], open("data_dict_target_block4.p", "wb"))
-        # print ("data_dict_target_block4.p... saved")
         elec_tl_avg = np.divide(elec_tl_avg, idx2)
         print("Saving the Pickle time locked averages")
         pickle.dump(elec_tl_avg, open("elec_tl_avg.p", "wb"))
         print("elec_tl_avg.p... saved")
-        # return elec_tl_avg
-        # return 1
 
 
 
